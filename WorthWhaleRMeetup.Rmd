@@ -1,0 +1,53 @@
+---
+title: "WorthWhaleRMeetup"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages}
+
+library(praise)
+library(tidyverse)
+library(lubridate)
+library(parsedate)
+library(anytime) # anytime: Anything to 'POSIXct' or 'Date' Converter
+
+
+```
+
+```{r data}
+
+# Read in vessel track data for April 20, 2017
+vesseltracks_0420_2017 <- read.csv("GPXtoCSV04-20.csv")
+
+# Read in whale sightings data for April 20, 2017
+whaleclusters_0420_2017 <- read.csv("2017_clusters_04-20.csv")
+
+```
+
+```{r}
+
+vesseltracks <- rename(vesseltracks_0420_2017, GPStime = time) 
+    # Change the "time" column name to "GPStime" in vesseltracks_0420_2017
+
+whaleclusters <- rename(whaleclusters_0420_2017, GPStime = DateTime)
+    # Change the "DateTime" column name to "GPStime" in whaleclusters_0420_2017
+
+tm <- as.POSIXlt(whaleclusters$GPStime, "UTC", "%Y-%m-%dT%H:%M:%S")
+strftime(tm , "%Y-%m-%dT%H:%M:%S%z")
+
+class(whaleclusters$GPStime) # "factor"
+# We need to convert "factor" to "POSIXct"
+
+# r <- as.POSIXct(whaleclusters$GPStime,format='%Y-%m-%dT%H:%M:%S%z')
+
+# w <- ymd_hms(whaleclusters$GPStime, tz="UTC")
+
+# whaleclusters$GPStime <- as.POSIXct(whaleclusters$GPStime, format = "%Y-%m-%dT%H:%M:%S%z")
+# whaleclusters$GPStime <- lubridate::ymd_hms(whaleclusters$GPStime)
+
+```
+
